@@ -6,7 +6,8 @@ async function Connect()
 {
         
     mongoose.connect(process.env.DB_URL).then(()=>{
-            console.log("DataBase is connected !");     
+            console.log("DataBase is connected !");  
+           
            
     }).catch((error)=>{
          console.log(error);
