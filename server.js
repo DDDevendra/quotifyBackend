@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-const PORT = 9002;
+const PORT = process.env.PORT || 9002;
 
 
 

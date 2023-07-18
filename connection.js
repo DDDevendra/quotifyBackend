@@ -1,10 +1,11 @@
 import mongoose, { connect } from "mongoose";
 
+import dotenv from "dotenv";
+dotenv.config();
 async function Connect()
 {
-    
-        const db_url = 'mongodb://127.0.0.1:27017/A02'
-    mongoose.connect(db_url).then(()=>{
+        
+    mongoose.connect(process.env.DB_URL).then(()=>{
             console.log("DataBase is connected !");     
            
     }).catch((error)=>{
