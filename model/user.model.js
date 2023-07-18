@@ -29,6 +29,17 @@ const UserSchema = new mongoose.Schema({
   
 });
 
+ 
+
+
+
+
+
+
+
+
+
+
 // Define a pre-save hook to hash the password
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
@@ -46,4 +57,4 @@ UserSchema.pre("save", async function (next) {
 });
 
 // Export the User model
-export default mongoose.model("User", UserSchema);
+export default mongoose.model("user", UserSchema);

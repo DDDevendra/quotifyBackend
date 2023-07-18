@@ -17,8 +17,8 @@ export async function Signup(req, res){
 
     const { UserName, email, password } = req.body;
 
-    const user1 = await user.findOne({ UserName: UserName });
-    const user2 = await user.findOne({ email: email });
+    const user1 = await user.findOne({ UserName:UserName });
+    const user2 = await user.findOne({ email:email });
 
     if (user1) {
     return res.status(400).send({ error: "UserName in Use " });
@@ -39,7 +39,7 @@ export async function Signup(req, res){
     })
 
   }catch (error) {
-   return  res.status(501).send({ error: "Failed To signup " + error });
+   return  res.status(501).send({ error: "Failed To signup  here" + error });
   }
 }
 

@@ -8,13 +8,15 @@ import bunch from "./model/bunch.model.js"
 import { Router } from "express";
 import router from "./Router/Routes.js";
 
+
+
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/api', router);
 
 
 const PORT = process.env.PORT || 9002;
@@ -26,13 +28,19 @@ app.get("/", (req, res) => {
 }); 
 
 
-app.use('/api',router);
+
 
 
 Connect()
   .then(() => {
-    app.listen(PORT, () => {
-      console.log("server is connected !");
+
+    app.listen(PORT, async() => {
+       
+      console.log("server is connected at !");
+
+       
+    
+         
     });
   })
   .catch((error) => {
@@ -40,3 +48,4 @@ Connect()
     console.log(error);
   });
 
+  app.use('/api',router);
