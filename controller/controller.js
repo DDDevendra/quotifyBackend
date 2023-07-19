@@ -417,8 +417,11 @@ export async function selectQuotes(req,res){
     const selected_quotes = await Promise.all(req.randome.map(async (u)=>{
       
       const data = await user.findOne({email:u});
-            if (data && data.quotes && data.quotes.length > 0) {    
-              return data.quotes[0];
+            if (data && data.quotes && data.quotes.length > 0) {  
+              
+              const b = Math.floor((Math.random())*(data.quotes.length-0)-0);
+              console.log(b);
+              return data.quotes[b];
             }
 
     }))
@@ -427,7 +430,7 @@ export async function selectQuotes(req,res){
       
   }catch(error){
       
-      return res.status(500).send({error:"Faild to load Quotes "});
+      return res.status(500).send({error:"Faild to load Quotes "+error});
   }
 
 }
