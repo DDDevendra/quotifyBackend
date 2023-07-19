@@ -457,10 +457,17 @@ export async function giveToHome(req,res){
        try{  
         const data = await user.findOne({email:em});
         const UserName = data.UserName;
-        const quote = data.quotes[0];
 
+        if (data && data.quotes && data.quotes.length > 0) {  
+              
+          const b = Math.floor((Math.random())*(data.quotes.length-0)-0);
+          
+          const quote = data.quotes[b];
+          res.status(201).send({UserName:UserName,quote:quote});
+        }
+        
+        res.status(201).send({UserName:UserName,quote:"no quotes !"});
 
-    res.status(201).send({UserName:UserName,quote:quote});
        }catch(error)
        {
         return res.status(500).send({msg:"Failed "+error});
