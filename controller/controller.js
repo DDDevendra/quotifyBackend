@@ -461,12 +461,13 @@ export async function giveToHome(req,res){
         if (data && data.quotes && data.quotes.length > 0) {  
               
           const b = Math.floor((Math.random())*(data.quotes.length-0)-0);
-          
+          console.log(data.quotes.length+" "+b);
           const quote = data.quotes[b];
-          res.status(201).send({UserName:UserName,quote:quote});
+         return res.status(201).send({UserName:UserName,quote:quote});
         }
         
-        res.status(201).send({UserName:UserName,quote:"no quotes !"});
+        const msg = "no quotes!";
+       return res.status(201).send({UserName:UserName,quote:msg});
 
        }catch(error)
        {
