@@ -420,12 +420,15 @@ export async function selectQuotes(req,res){
             if (data && data.quotes && data.quotes.length > 0) {  
               
               const b = Math.floor((Math.random())*(data.quotes.length-0)-0);
-              console.log(b);
+              
               return data.quotes[b];
             }
 
+            
+
     }))
     const quotes_data = selected_quotes.filter(Boolean);
+   
           return res.status(201).send({data:quotes_data});
       
   }catch(error){
