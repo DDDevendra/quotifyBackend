@@ -27,5 +27,12 @@ router.route('/selectQuotes').get(controller.selectuser,controller.selectQuotes)
 router.route('/givetohome').get(controller.giveToHome);
 
 router.route('/sendUserData').get(controller.sendUserData);
+router.route('/sendprofileData').post(controller.sendprofileData);
+
+
+router.route('/followit').post(controller.followit);
+router.route('/doifollow').put(controller.doifollow);
+router.route('/Unfollowit').post(controller.Unfollowit);
+
 
 export default router;

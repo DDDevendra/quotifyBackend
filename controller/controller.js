@@ -194,7 +194,7 @@ export async function RestPassword(req, res) {
      {
         return res.status(400).send({error:"User Dont found !"});
      }
-     if(parseInt(password)!=parseInt(cpassword))
+     if((password)!=(cpassword))
      {
       return res.status(400).send({error:"Password Don't match !"});
      }
@@ -475,11 +475,11 @@ export async function giveToHome(req,res){
           const b = Math.floor((Math.random())*(data.quotes.length-0)-0);
           
           const quote = data.quotes[b];
-         return res.status(201).send({UserName:UserName,quote:quote});
+         return res.status(201).send({UserName:UserName,quote:quote,email:em});
         }
         
         const msg = "no quotes!";
-       return res.status(201).send({UserName:UserName,quote:msg});
+       return res.status(201).send({UserName:UserName,quote:msg,email:em});
 
        }catch(error)
        {
@@ -508,11 +508,130 @@ export async function sendUserData(req,res){
       return res.status(400).send({error:"User not found !"});
     }
 
-    return res.status(201).send({UserName:data.UserName,quotes:data.quotes});
+    return res.status(201).send({UserName:data.UserName,quotes:data.quotes,followers:data.followers,following:data.following});
 
 
   }catch(error)
   {
     return res.status(500).send({error:"User not found !2"});
   }
+}
+
+export async function sendprofileData(req,res){
+
+    try{
+
+      const email = req.body.email;
+      const data = await user.findOne({email:email});
+
+      if(!data)
+      {
+        return res.status(400).send({error:"User not found "});
+      }
+
+      return res.status(201).send({UserName:data.UserName,quotes:data.quotes,followers:data.followers.length,following:data.following.length});
+
+
+
+    }catch(error){
+
+      return res.status(501).send({error:"Faild to load data "});
+    }
+}
+
+export async function followit(req,res){
+     
+    try{
+
+      const i = req.body.email;
+      const you = req.body.pemail;
+
+      const id = await user.findOne({email:i});
+      const youd = await user.findOne({email:you});
+
+      id.following.push(youd);
+      youd.followers.push(id);
+
+      id.save().then(()=>{
+
+          youd.save().then(()=>{
+
+              return res.status(201).send({msg:"Followed youser"});
+          }).catch((e)=>{
+
+            return res.status(500).send({error:"Faild to follow "+e});
+          })
+      }).catch((e)=>{
+
+        return res.status(500).send({error:"Faild to follow "+e});
+      })
+
+
+
+    }catch(error){
+
+      return res.status(500).send({error:"Faild to follow "+error});
+    }
+}
+
+
+export async function doifollow(req,res){
+
+  try{
+
+    const i = req.body.email;
+    const you = req.body.pemail;
+
+    const id = await user.findOne({email:i});
+    const youd = await user.findOne({email:you});
+
+   const is = youd.followers.includes(id._id);
+     
+   if(is)
+   {
+      return res.status(201).send({msg:"you aldredy follow user"});
+   }else
+   {
+     return res.status(501).send({error:"you don't follow "});
+   }
+
+  }catch(error){
+
+    return res.status(500).send({error:"Faild to follow "+error});
+  }
+
+}
+
+export async function Unfollowit(req,res){
+
+    try{
+
+    const i = req.body.email;
+    const you = req.body.pemail;
+
+    const id = await user.findOne({email:i});
+    const youd = await user.findOne({email:you});
+
+   const is = youd.followers.pull(id);
+   id.following.pull(youd);
+
+   id.save();
+   youd.save();
+   
+
+   if(is)
+   {
+      return res.status(201).send({msg:"you unfollowd "});
+   }else
+   {
+     return res.status(501).send({error:"faild to unfollow "});
+   }
+
+
+  }catch(error){
+
+    return res.status(500).send({error:"Faild to follow "+error});
+  }
+
+
 }

@@ -26,6 +26,16 @@ const UserSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Bunch",
   }],
+  followers:[
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref:"UserSchema"  
+    }
+  ],
+  following:[{
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"UserSchema"  
+  }]
   
 });
 
