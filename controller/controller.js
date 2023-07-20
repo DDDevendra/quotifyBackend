@@ -102,11 +102,13 @@ export async function SendMail(req,res)
 {
     try{
 
-        const token = req.headers["x-access-token"];
-        const decode = jwt.verify(token,"secret123");
-        const email = decode.email; 
+        // const token = req.headers["x-access-token"];
+        // const decode = jwt.verify(token,"secret123");
+     
+        const email = req.body.email; 
 
-        const data = await user.findOne({email});
+        const data = await user.findOne({email:email});
+ 
 
         if(!data)
         {
@@ -135,13 +137,17 @@ export async function SendMail(req,res)
                 text: message + req.OTP,
               };
 
-              await transporter.sendMail(mailOptions);
-              res.status(201).json({ message: 'Email sent successfully!' });
+              await transporter.sendMail(mailOptions).then(()=>{
+                res.status(201).json({ msg: 'Email sent successfully!' });
+              }).catch((e)=>{
+                res.status(500).json({error:e});
+              });
+        
           
 
         }catch(error)
         {
-            return res.status(501).send({ error : " Failed to send Mail "});
+            return res.status(501).send({ error : " Failed to send Mail "+error});
         }
 
 
@@ -149,7 +155,7 @@ export async function SendMail(req,res)
 
     }catch(error)
     {
-        return res.status(501).send({ error : " Failed to send mail "});
+        return res.status(501).send({ error : " Failed to send mail "+error});
     }
 }
 
@@ -179,13 +185,19 @@ export async function RestPassword(req, res) {
  
    try {
 
-    const token = req.headers["x-access-token"];
-    const decode = jwt.verify(token,"secret123");
-    const email = decode.email; 
-
     
-     const { password } = req.body;
-     const data = await user.findOne({ email });
+     const { email ,password ,cpassword } = req.body;
+
+     const data = await user.findOne({ email:email });
+
+     if(!data)
+     {
+        return res.status(400).send({error:"User Dont found !"});
+     }
+     if(parseInt(password)!=parseInt(cpassword))
+     {
+      return res.status(400).send({error:"Password Don't match !"});
+     }
      
      if (data) {
  
@@ -461,7 +473,7 @@ export async function giveToHome(req,res){
         if (data && data.quotes && data.quotes.length > 0) {  
               
           const b = Math.floor((Math.random())*(data.quotes.length-0)-0);
-          console.log(data.quotes.length+" "+b);
+          
           const quote = data.quotes[b];
          return res.status(201).send({UserName:UserName,quote:quote});
         }
